@@ -1,3 +1,6 @@
+import random
+
+
 n_cities = 17
 
 distances = [
@@ -24,7 +27,7 @@ def get_total_distance(tour : list):
 
     total_distance = 0
 
-    for j in range(n_cities - 1):
+    for i in range(n_cities - 1):
         total_distance = total_distance + distances[tour[i]][tour[i + 1]]
 
     total_distance = total_distance + distances[tour[-1]][tour[0]]
@@ -39,5 +42,27 @@ def nearest_neighbor_heuristic():
     while unvisited:
 
         next = min(unvisited, key = lambda candidate : distances[tour[-1]][candidate])
+        tour.append(next)
+        unvisited.remove(next)
+
+    return tour
+
+def random_nearest_neighbor_heuristic():
+
+    unvisited = list(range(n_cities))
+    n = int(random.uniform(n_cities))
+    tour = random.sample(unvisited, int(n_cities / 2))
+
+    for i in range(len(tour)):
+        unvisited.remove(tour[i])
+
+    while unvisited:
+
+        next = min(unvisited, key = lambda candidate : distances[tour[-1]][candidate])
+        tour.append(next)
+        unvisited.remove(next)
+
+    return tour
 
 tour = nearest_neighbor_heuristic()
+print (tour, get_total_distance(tour))
